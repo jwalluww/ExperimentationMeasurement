@@ -1,135 +1,135 @@
-# MarketingScience
+# ExperimentationMeasurement
 
-A collection of end-to-end marketing data science projects built on realistic synthetic data. Each project tackles a core problem in modern marketing analytics — measurement, attribution, personalization, pricing, and customer value — using the methods and tools used in production at leading retail and e-commerce organizations.
+A collection of projects focused on the design, execution, and analysis of experiments — and what to do when you can't run one. Built on realistic synthetic data modeled after the kinds of problems that show up at large-scale digital platforms: gaming, streaming, subscription products, and consumer apps.
 
-All datasets are synthetically generated to mirror real-world complexity: seasonality, noise, confounding, and uneven sample sizes included.
+Every project starts with a real business question. The statistics exist to answer it, not the other way around.
 
 ---
 
 ## Why this repo exists
 
-Marketing science sits at the intersection of causal inference, Bayesian modeling, and business strategy. These projects are my way of going deep on the methods that actually move the needle — not toy examples, but realistic problem framings with defensible modeling choices and interpretable outputs.
+Running an A/B test is easy. Running one correctly — with the right randomization unit, the right metric, enough power, and a results readout that actually drives a decision — is the job. This repo documents how I think about experimentation end-to-end, including the parts that usually get skipped: interference, variance reduction, metric design, and communicating uncertainty to people who don't care about p-values.
 
 ---
 
 ## Projects
 
-### 1. `mmm-bayesian` — Bayesian Marketing Mix Modeling
-> *Which channels are actually driving revenue, and how should we reallocate budget?*
+### 1. `ab-framework` — Reusable A/B Testing Framework
+> *How do we standardize experimentation so every test is designed and analyzed the same rigorous way?*
 
-Bayesian MMM built in PyMC with adstock decay and saturation curves across five synthetic marketing channels (paid search, social, email, display, TV). Outputs channel-level ROI with full posterior uncertainty and a budget reallocation optimizer.
+A Python framework covering the full experiment lifecycle: power calculation, randomization, sequential monitoring, and a plain-English results readout. Includes a "broken experiments" module — intentionally flawed tests with annotated diagnoses showing what went wrong and how to catch it.
 
-**Methods:** Adstock transformation · Hill saturation · Bayesian regression · PyMC-Marketing · posterior predictive checks · budget optimization via SciPy
+**Methods:** Power analysis · t-test · Mann-Whitney · proportion z-test · multiple comparisons correction (Bonferroni, BH) · guardrail metric checking
 
-**Skills demonstrated:** MMM architecture · diminishing returns modeling · uncertainty quantification · media planning recommendations
-
----
-
-### 2. `geo-incrementality` — Geo-Based Incrementality Testing
-> *Did this promotion actually cause a sales lift, or would those customers have bought anyway?*
-
-Simulates a regional promotional campaign across synthetic DMAs. Applies synthetic control and difference-in-differences to estimate true incremental lift, then compares against a naive pre/post estimate to show the bias without a proper counterfactual.
-
-**Methods:** Synthetic control · difference-in-differences · parallel trends validation · Bayesian structural time series · CausalImpact-style analysis
-
-**Skills demonstrated:** Geo experiment design · causal identification · counterfactual estimation · communicating lift to non-technical stakeholders
+**Skills demonstrated:** Experiment framework design · hypothesis development · metric selection · results communication · scalable best practices
 
 ---
 
-### 3. `clv-hierarchical` — Customer Lifetime Value with Hierarchical Bayes
-> *Which customers are worth investing in long-term, and how much should we spend to acquire or retain them?*
+### 2. `bayesian-ab` — Bayesian A/B Testing with Sequential Monitoring
+> *Can we make a ship/no-ship decision before the experiment is scheduled to end — without inflating false positives?*
 
-BG/NBD model for purchase frequency and Gamma-Gamma model for spend, fit on synthetic retail transaction data with realistic patterns: seasonal buyers, one-time purchasers, high-frequency loyalists. Outputs 12-month CLV distributions by customer segment with uncertainty intervals.
+Frequentist fixed-horizon testing fails when stakeholders peek. Bayesian sequential testing solves this by updating continuously and stopping when there's enough evidence. Simulates a PlayStation Store conversion rate experiment with daily posterior updates, a ROPE-based stopping rule, and a comparison against a frequentist test that peeked at the same checkpoints.
 
-**Methods:** BG/NBD · Gamma-Gamma · PyMC · hierarchical priors · partial pooling across segments · posterior CLV distributions
+**Methods:** Beta-Binomial conjugate model · PyMC · posterior probability of superiority · ROPE · expected loss · mSPRT · always-valid confidence sequences
 
-**Skills demonstrated:** Probabilistic customer modeling · retention budget framing · segment-level uncertainty · CLV-to-acquisition-cost comparison
-
----
-
-### 4. `uplift-promotions` — Dual Uplift Modeling for Promotional Targeting
-> *Who should we send this offer to, and who are we just training to wait for discounts?*
-
-Synthetic dataset of customers offered a promotional discount vs. control. Builds a two-model uplift approach alongside a causal forest via EconML. Segments customers into the four classic quadrants: persuadables, sure things, lost causes, sleeping dogs. Outputs a targeting policy with estimated net revenue lift vs. blanket promotion.
-
-**Methods:** S-learner · T-learner · causal forest (EconML) · CATE estimation · Qini curve · uplift decile analysis
-
-**Skills demonstrated:** Heterogeneous treatment effects · promotion ROI framing · targeting policy design · dual uplift methodology
+**Skills demonstrated:** Sequential testing · Bayesian inference · stopping rules · peeking problem · communicating posteriors to non-technical partners
 
 ---
 
-### 5. `price-elasticity` — Hierarchical Bayesian Price Elasticity Modeling
-> *If we raise the price of this product, what actually happens to demand and total revenue?*
+### 3. `cuped` — Variance Reduction with CUPED
+> *How do we run shorter experiments with fewer users without sacrificing statistical power?*
 
-Synthetic SKU-level weekly price and sales data across product categories with realistic cross-price effects and seasonal demand patterns. Fits a hierarchical Bayesian model where elasticity varies by category, season, and price tier. Includes a revenue simulator for "what if we raise price X% on category Y" scenarios.
+CUPED (Controlled-experiment Using Pre-Experiment Data) uses pre-experiment behavior as a covariate to reduce outcome variance. Simulates a feature experiment on a gaming platform with high natural variance in session time. Shows the variance reduction achieved, the equivalent sample size savings, and how confidence intervals shrink — then documents the tradeoffs and assumptions.
 
-**Methods:** Hierarchical Bayesian regression · log-log demand model · PyMC · partial pooling across SKUs · posterior predictive revenue simulation
+**Methods:** CUPED · ANCOVA · OLS covariate adjustment · residualization · variance reduction % · post-stratification · MLRATE
 
-**Skills demonstrated:** Demand modeling · price optimization · category-level elasticity · revenue impact simulation
-
----
-
-### 6. `segmentation-propensity` — Customer Segmentation & Purchase Propensity
-> *Who is likely to buy soon, and how do we prioritize outreach across a large customer base?*
-
-Synthetic CRM dataset with purchase history, loyalty tier, channel engagement, and recency signals. RFM-based segmentation combined with a hierarchical propensity model for likelihood to purchase in the next 30 days. Thin-data customers borrow strength from similar segments via partial pooling.
-
-**Methods:** RFM segmentation · hierarchical logistic regression · PyMC · partial pooling · calibration curves · ranking by expected incremental value
-
-**Skills demonstrated:** Customer segmentation · propensity modeling · personalization targeting · handling sparse customer histories
+**Skills demonstrated:** Variance reduction · experiment efficiency · covariate adjustment · experiment platform thinking
 
 ---
 
-### 7. `mta-attribution` — Multi-Touch Attribution
-> *Which touchpoints in the customer journey deserve credit for the conversion?*
+### 4. `quasi-experiments` — Causal Inference Without Randomization
+> *A feature shipped without an experiment. Did it actually change behavior?*
 
-Synthetic customer journey data with sequences of marketing touchpoints leading to purchase or no purchase. Builds Markov chain attribution and Shapley value attribution, compares both against last-touch as the naive baseline. Shows how budget decisions change under each model.
+Three quasi-experimental methods applied to the same synthetic scenario — a platform update that rolled out to all users with no holdout. Difference-in-differences uses a comparable unaffected cohort. Regression discontinuity exploits a version threshold as a natural experiment. Interrupted time series models the pre/post trend break. Each method gets its own assumptions, diagnostics, and honest limitations section.
 
-**Methods:** Markov chain attribution · Shapley values · transition matrix estimation · removal effect · comparison vs. last-touch and first-touch baselines
+**Methods:** Difference-in-differences · parallel trends test · regression discontinuity · ITS · ARIMAX · Bayesian structural time series
 
-**Skills demonstrated:** Attribution modeling · customer journey analysis · channel credit allocation · translating attribution to budget decisions
-
----
-
-### 8. `promo-cannibalization` — Promotion Cannibalization & Halo Effects
-> *When we discount one product, does it lift the whole category or just steal sales from adjacent SKUs?*
-
-Synthetic transaction data across a product category during a promotional event. Models cross-SKU and cross-category effects to estimate net category lift, cannibalization rate, and halo lift on adjacent products. Often the story is more nuanced than the headline promo lift number.
-
-**Methods:** Difference-in-differences · synthetic control · cross-elasticity estimation · hierarchical Bayesian regression · category-level net lift
-
-**Skills demonstrated:** Promotion measurement · cannibalization modeling · category management analytics · retail-specific causal framing
+**Skills demonstrated:** Quasi-experimental design · causal identification · method selection judgment · assumption validation
 
 ---
 
-### 9. `demand-forecasting` — Hierarchical Demand Forecasting
-> *How many units will we sell next week, and how uncertain should we be about that?*
+### 5. `network-effects` — Experiments Under Interference
+> *What happens when treatment and control users interact with each other?*
 
-Synthetic SKU-store-week sales data with realistic seasonality, trend, promotional spikes, and stockout patterns. Fits a hierarchical time series model so low-volume SKUs borrow signal from category-level trends. Outputs probabilistic forecasts with credible intervals rather than point estimates.
+Standard A/B assumptions break down on social and multiplayer platforms. Simulates a new Party Chat feature on a synthetic social gaming network. Shows how individual randomization produces biased estimates due to spillover, then applies cluster randomization by friend group and a switchback design as alternatives. Compares all three estimates.
 
-**Methods:** Hierarchical time series · Prophet · statsforecast · Bayesian structural time series · partial pooling across SKU hierarchy · quantile forecasting
+**Methods:** SUTVA · cluster randomization · graph clustering (networkx) · switchback design · exposure mapping · bias quantification
 
-**Skills demonstrated:** Demand forecasting · retail hierarchy modeling · probabilistic forecasting · inventory decision framing
+**Skills demonstrated:** Network experiment design · interference detection · cluster-level analysis · platform-specific experiment thinking
 
 ---
 
-### 10. `ab-testing-framework` — Experimentation Framework & Best Practices
-> *Did this change we made actually work, and how do we know we're not fooling ourselves?*
+### 6. `metric-design` — Metric Selection & Sensitivity Analysis
+> *We can measure a lot of things. Which ones should we actually put in the experiment?*
 
-A reusable experimentation framework covering the full lifecycle: power calculation, randomization, sequential monitoring, and results readout. Includes a "bad experiments museum" — deliberately broken tests (underpowered, peeked at early, wrong randomization unit) with annotated diagnoses.
+A framework for evaluating and selecting experiment metrics — not just picking what's easy to measure. Applied to a synthetic subscription gaming platform. For each candidate metric, documents sensitivity (will it move if the feature works?), trustworthiness (can it be gamed or confounded?), and directionality (does up always mean good?). Includes a guardrail metric audit.
 
-**Methods:** Power analysis · t-test · Mann-Whitney · Bayesian A/B · sequential testing · CUPED · multiple comparisons correction
+**Methods:** Metric sensitivity simulation · variance estimation · minimum detectable effect analysis · Goodhart's Law diagnostics · OEC (overall evaluation criterion) design · ratio metric variance via delta method
 
-**Skills demonstrated:** Experiment design · statistical rigor · framework thinking · communicating results to non-technical partners
+**Skills demonstrated:** Metric design · experiment strategy · hypothesis development · guardrail framework · translating metrics to business outcomes
+
+---
+
+### 7. `geo-testing` — Geo-Based Experiments for Platform-Wide Changes
+> *How do we test something that can't be randomized at the user level?*
+
+Some interventions — pricing changes, app store promotions, TV campaigns — happen at the market level. Simulates a subscription price test across synthetic regional markets. Applies synthetic control for counterfactual estimation and validates the pre-treatment parallel trends assumption. Compares against a naive pre/post estimate to quantify the bias from not having a proper control.
+
+**Methods:** Synthetic control · difference-in-differences · DMA-level randomization · pre-treatment fit diagnostics · placebo tests · RMSPE
+
+**Skills demonstrated:** Geo experiment design · market-level causal inference · synthetic control · incrementality estimation
+
+---
+
+### 8. `player-retention` — Retention Curve Modeling & Experiment Sensitivity
+> *Does this feature change long-term retention, and would our experiment have been able to detect it?*
+
+Survival analysis applied to synthetic player cohort data — daily logins, session lengths, and churn events across 90 days post-signup. Fits a Kaplan-Meier curve and a Weibull survival model. Then simulates what a 5% improvement in D7 retention would look like downstream on D30 and LTV, and back-calculates what experiment duration and sample size would be needed to reliably detect it.
+
+**Methods:** Kaplan-Meier · Weibull survival model · D1/D7/D30/D90 retention curves · power analysis for survival outcomes · LTV projection · lifelines
+
+**Skills demonstrated:** Retention modeling · survival analysis · experiment sensitivity · connecting experiment outcomes to business metrics
+
+---
+
+### 9. `results-communication` — Translating Experiment Results into Decisions
+> *The experiment is done. Now what do we actually tell leadership?*
+
+A structured readout template and worked examples for communicating experiment results to non-technical stakeholders. Takes three synthetic experiment outcomes — a clear win, a clear null, and an ambiguous borderline case — and writes each up as a ship/no-ship recommendation memo. Documents assumptions, risks, and what would have to be true for the recommendation to be wrong.
+
+**Methods:** Effect size framing · practical vs. statistical significance · confidence interval communication · decision framework · sensitivity analysis narrative · risk framing
+
+**Skills demonstrated:** Stakeholder communication · decision-driving analytics · technical-to-business translation · experiment readout design
+
+---
+
+### 10. `multi-metric-testing` — Multiple Metrics, Multiple Comparisons, and Experiment Integrity
+> *We're testing 12 metrics. How do we avoid fooling ourselves into thinking something worked?*
+
+Multiple comparisons inflate false positive rates — if you test enough metrics, something will look significant by chance. Simulates an experiment with a realistic metric suite (primary, secondary, guardrails) and applies Bonferroni, Benjamini-Hochberg, and Bayesian shrinkage approaches to control error rates. Includes a worked example of a "winning" experiment that was actually a false positive, and how each correction method would have caught it.
+
+**Methods:** FWER · FDR · Bonferroni correction · Benjamini-Hochberg · Bayesian shrinkage · hierarchical modeling for multiple outcomes · simultaneous credible intervals
+
+**Skills demonstrated:** Multiple comparisons · experiment integrity · metric hierarchy design · false positive control
 
 ---
 
 ## Stack
 
 ```
-Python · PyMC · ArviZ · EconML · statsmodels · scikit-learn
-pandas · NumPy · SciPy · matplotlib · seaborn
-Snowflake · SQL · Jupyter
+Python · PyMC · ArviZ · scipy.stats · statsmodels · EconML
+lifelines · networkx · pandas · NumPy · matplotlib · seaborn
+SQL · Jupyter
 ```
 
 ---
@@ -137,29 +137,29 @@ Snowflake · SQL · Jupyter
 ## Structure
 
 ```
-MarketingScience/
-├── mmm-bayesian/
-│   ├── data/                  # synthetic data generation script
-│   ├── notebooks/             # step-by-step analysis
-│   ├── src/                   # reusable modeling code
-│   └── README.md              # project-level writeup
-├── geo-incrementality/
-├── clv-hierarchical/
-├── uplift-promotions/
-├── price-elasticity/
-├── segmentation-propensity/
-├── mta-attribution/
-├── promo-cannibalization/
-├── demand-forecasting/
-└── ab-testing-framework/
+ExperimentationMeasurement/
+├── ab-framework/
+│   ├── data/                  # synthetic data generation
+│   ├── notebooks/             # step-by-step walkthrough
+│   ├── src/                   # reusable experiment class
+│   └── README.md
+├── bayesian-ab/
+├── cuped/
+├── quasi-experiments/
+├── network-effects/
+├── metric-design/
+├── geo-testing/
+├── player-retention/
+├── results-communication/
+└── multi-metric-testing/
 ```
 
-Each project folder contains its own README with the business question, modeling decisions, key findings, and limitations.
+Each project folder contains its own README with the business question, modeling decisions, key findings, and honest limitations.
 
 ---
 
 ## About
 
-Built by Justin — data scientist with 10+ years across retail, supply chain, marketing analytics, finance, and SaaS. Focused on Bayesian inference, causal inference, and building models that inform real decisions.
+Built by Justin — data scientist with 10+ years across retail, supply chain, marketing analytics, finance, and SaaS. Focused on experimentation, causal inference, and Bayesian methods applied to real product and business decisions.
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-connect-blue?style=flat&logo=linkedin)](https://linkedin.com/in/justindwall)
