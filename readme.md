@@ -14,6 +14,15 @@ Running an A/B test is easy. Running one correctly — with the right randomizat
 
 ## Projects
 
+### 10. `ab-testing-framework` Experimentation Framework & Best Practices
+> *Did this change we made actually work, and how do we know we're not fooling ourselves?*
+
+A reusable experimentation framework covering the full lifecycle: power calculation, randomization, sequential monitoring, and results readout. Includes a "bad experiments museum", deliberately broken tests (underpowered, peeked at early, wrong randomization unit) with annotated diagnoses.
+
+**Methods:** Power analysis · t-test · Mann-Whitney · Bayesian A/B · sequential testing · CUPED · multiple comparisons correction
+
+**Skills demonstrated:** Experiment design · statistical rigor · framework thinking · communicating results to non-technical partners
+
 ### 1. `ab-framework` — Reusable A/B Testing Framework
 > *How do we standardize experimentation so every test is designed and analyzed the same rigorous way?*
 
